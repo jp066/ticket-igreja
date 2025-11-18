@@ -94,16 +94,6 @@ const Purchase = () => {
               Comprar Filipeta
             </Button>
           </form>
-
-          <div className="mt-6 pt-6 border-t text-center">
-            <Button
-              variant="ghost"
-              onClick={() => navigate("/dashboard")}
-              className="text-muted-foreground"
-            >
-              Acessar Dashboard
-            </Button>
-          </div>
         </CardContent>
       </Card>
     </div>
