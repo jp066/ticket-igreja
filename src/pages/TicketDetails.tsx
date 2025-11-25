@@ -2,38 +2,44 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, Home } from "lucide-react";
+import { CheckCircle, Home, Loader2, LayoutDashboard } from "lucide-react";
 import QRCodeStyling from "qr-code-styling";
-
-interface Ticket {
-  id: string;
-  name: string;
-  phone: string;
-  quantity: number;
-  createdAt: string;
-  used: boolean;
-}
+import { getTicketById, Ticket } from "@/lib/ticketService";
+import { toast } from "sonner";
 
 const TicketDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [ticket, setTicket] = useState<Ticket | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (id) {
-      const storedTicket = localStorage.getItem(`ticket-${id}`);
-      if (storedTicket) {
-        setTicket(JSON.parse(storedTicket));
+    const fetchTicket = async () => {
+      if (!id) {
+        setIsLoading(false);
+        return;
       }
-    }
+
+      try {
+        const ticketData = await getTicketById(id);
+        setTicket(ticketData);
+      } catch (error) {
+        console.error('Erro ao buscar filipeta:', error);
+        toast.error("Erro ao carregar filipeta");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTicket();
   }, [id]);
 
   useEffect(() => {
-    if (ticket) {
+    if (ticket && ticket.id) {
       const qrCode = new QRCodeStyling({
         width: 240,
         height: 240,
-        data: ticket.id,
+        data: ticket.ticketCode || ticket.id,
         dotsOptions: {
           color: "#10b981",
           type: "rounded"
@@ -55,9 +61,44 @@ const TicketDetails = () => {
     }
   }, [ticket]);
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        {/* Dashboard Button */}
+        <Button
+          onClick={() => navigate("/dashboard")}
+          variant="outline"
+          size="sm"
+          className="fixed top-4 left-4 z-50"
+        >
+          <LayoutDashboard className="w-4 h-4 mr-2" />
+          Dashboard
+        </Button>
+
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6 text-center">
+            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
+            <p className="text-muted-foreground">Carregando filipeta...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (!ticket) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        {/* Dashboard Button */}
+        <Button
+          onClick={() => navigate("/dashboard")}
+          variant="outline"
+          size="sm"
+          className="fixed top-4 left-4 z-50"
+        >
+          <LayoutDashboard className="w-4 h-4 mr-2" />
+          Dashboard
+        </Button>
+
         <Card className="w-full max-w-md">
           <CardContent className="pt-6 text-center">
             <p className="text-muted-foreground mb-4">Filipeta não encontrada</p>
@@ -72,6 +113,17 @@ const TicketDetails = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      {/* Dashboard Button */}
+      <Button
+        onClick={() => navigate("/dashboard")}
+        variant="outline"
+        size="sm"
+        className="fixed top-4 left-4 z-50"
+      >
+        <LayoutDashboard className="w-4 h-4 mr-2" />
+        Dashboard
+      </Button>
+
       <Card className="w-full max-w-md">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mb-2">
@@ -91,7 +143,7 @@ const TicketDetails = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Código</p>
-              <p className="font-mono text-sm font-medium">{ticket.id}</p>
+              <p className="font-mono text-sm font-medium">{ticket.ticketCode || ticket.id}</p>
             </div>
           </div>
 

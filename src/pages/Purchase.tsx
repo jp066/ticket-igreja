@@ -4,18 +4,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Ticket } from "lucide-react";
+import { Ticket, LayoutDashboard } from "lucide-react";
 import { toast } from "sonner";
+import { createTicket } from "@/lib/ticketService";
 
 const Purchase = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     quantity: 1,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.name || !formData.phone || formData.quantity < 1) {
@@ -23,26 +25,39 @@ const Purchase = () => {
       return;
     }
 
-    // Gerar ID único para a filipeta
-    const ticketId = `FLP-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
-    
-    // Aqui você integraria com Firebase/Firestore
-    // Por enquanto, vamos simular salvando no localStorage
-    const purchase = {
-      id: ticketId,
-      ...formData,
-      createdAt: new Date().toISOString(),
-      used: false,
-    };
-    
-    localStorage.setItem(`ticket-${ticketId}`, JSON.stringify(purchase));
-    
-    toast.success("Filipeta comprada com sucesso!");
-    navigate(`/ticket/${ticketId}`);
+    setIsLoading(true);
+
+    try {
+      // Salvar no Firebase Firestore
+      const ticketId = await createTicket({
+        name: formData.name,
+        phone: formData.phone,
+        quantity: formData.quantity,
+      });
+      
+      toast.success("Filipeta comprada com sucesso!");
+      navigate(`/ticket/${ticketId}`);
+    } catch (error) {
+      console.error('Erro ao comprar filipeta:', error);
+      toast.error("Erro ao processar a compra. Tente novamente.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      {/* Dashboard Button */}
+      <Button
+        onClick={() => navigate("/dashboard")}
+        variant="outline"
+        size="sm"
+        className="fixed top-4 left-4 z-50"
+      >
+        <LayoutDashboard className="w-4 h-4 mr-2" />
+        Dashboard
+      </Button>
+
       <Card className="w-full max-w-md">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-2">
@@ -90,8 +105,8 @@ const Purchase = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full" size="lg">
-              Comprar Filipeta
+            <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
+              {isLoading ? "Processando..." : "Comprar Filipeta"}
             </Button>
           </form>
         </CardContent>

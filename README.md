@@ -1,3 +1,31 @@
+# 🎟️ Sistema de Filipetas - Igreja
+
+Sistema completo de venda e gerenciamento de filipetas (ingressos) para eventos da igreja, com integração Firebase Firestore.
+
+## 🔥 IMPORTANTE: Configuração do Firebase
+
+Antes de usar o sistema, você precisa configurar o Firebase. **Leia o arquivo [FIREBASE_SETUP.md](./FIREBASE_SETUP.md)** para instruções detalhadas.
+
+### Configuração Rápida:
+
+1. **Instalar Firebase:**
+
+```bash
+npm install firebase
+```
+
+2. **Configurar credenciais:**
+
+   - Crie um arquivo `.env` na raiz do projeto
+   - Copie o conteúdo de `.env.example`
+   - Substitua com suas credenciais do Firebase Console
+
+3. **Ou edite diretamente:**
+   - Abra `src/lib/firebase.ts`
+   - Substitua as credenciais do Firebase
+
+---
+
 # Welcome to your Lovable project
 
 ## Project info
