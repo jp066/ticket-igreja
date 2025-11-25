@@ -76,31 +76,37 @@ Após o deploy, você receberá URLs como:
 ## 📝 Comandos Úteis
 
 ### Build de Produção
+
 ```bash
 npm run build
 ```
 
 ### Preview Local da Build
+
 ```bash
 npm run preview
 ```
 
 ### Deploy Completo (Hosting + Firestore Rules)
+
 ```bash
 firebase deploy
 ```
 
 ### Deploy Apenas Hosting
+
 ```bash
 firebase deploy --only hosting
 ```
 
 ### Deploy Apenas Firestore Rules
+
 ```bash
 firebase deploy --only firestore:rules
 ```
 
 ### Ver Sites Hospedados
+
 ```bash
 firebase hosting:sites:list
 ```
@@ -127,6 +133,7 @@ firebase init hosting:github
 ```
 
 Siga os passos:
+
 - Repository: `jp066/ticket-igreja`
 - Autorize no GitHub
 - Configure deploy automático
@@ -148,15 +155,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          
+          node-version: "18"
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Build
         run: npm run build
         env:
@@ -166,7 +173,7 @@ jobs:
           VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
           VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
-          
+
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -215,6 +222,7 @@ Após o deploy, teste:
 ## 🐛 Troubleshooting
 
 ### Erro: "Build failed"
+
 ```bash
 # Limpe e reinstale
 rm -rf node_modules dist
@@ -223,6 +231,7 @@ npm run build
 ```
 
 ### Erro: "Firebase not initialized"
+
 ```bash
 # Faça login novamente
 firebase login
@@ -230,22 +239,27 @@ firebase use ticket-igreja
 ```
 
 ### Erro: "Domain not authorized"
+
 - Vá em Firebase Console > Authentication > Settings
 - Adicione o domínio do hosting
 
 ### Erro: "Firestore permission denied"
+
 - Verifique as regras em `firestore.rules`
 - Faça deploy das regras: `firebase deploy --only firestore:rules`
 
 ## 📊 Monitoramento
 
 ### Ver Logs
+
 ```bash
 firebase hosting:channel:list
 ```
 
 ### Analytics (opcional)
+
 Adicione Google Analytics no Firebase Console para monitorar:
+
 - Número de visitantes
 - Filipetas vendidas
 - Taxa de conversão
@@ -264,11 +278,11 @@ service cloud.firestore {
       // Qualquer pessoa pode criar e ler filipetas
       allow create: if true;
       allow read: if true;
-      
+
       // Apenas usuário autorizado pode atualizar
-      allow update: if request.auth != null 
+      allow update: if request.auth != null
         && request.auth.token.email == 'joaopedrooliveira030506@gmail.com';
-      
+
       // Ninguém pode deletar
       allow delete: if false;
     }
@@ -277,6 +291,7 @@ service cloud.firestore {
 ```
 
 Deploy das regras:
+
 ```bash
 firebase deploy --only firestore:rules
 ```
@@ -284,6 +299,7 @@ firebase deploy --only firestore:rules
 ## 🎉 Pronto!
 
 Seu sistema está no ar em:
+
 - `https://ticket-igreja.web.app`
 - `https://ticket-igreja.firebaseapp.com`
 

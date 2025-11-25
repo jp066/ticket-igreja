@@ -3,6 +3,7 @@
 ## ❌ Problema Original
 
 Erro no console:
+
 ```
 Cross-Origin-Opener-Policy policy would block the window.closed call.
 ```
@@ -14,33 +15,39 @@ Este erro ocorre quando se tenta usar `signInWithPopup` do Firebase Auth em ambi
 ### 1. Mudança de Popup para Redirecionamento
 
 **Antes (com popup):**
+
 ```typescript
-signInWithPopup(auth, googleProvider)
+signInWithPopup(auth, googleProvider);
 ```
 
 **Depois (com redirecionamento):**
+
 ```typescript
-signInWithRedirect(auth, googleProvider)
-getRedirectResult(auth) // Processa o resultado após retornar
+signInWithRedirect(auth, googleProvider);
+getRedirectResult(auth); // Processa o resultado após retornar
 ```
 
 ### 2. Arquivos Modificados
 
 #### `src/contexts/AuthContext.tsx`
+
 - ✅ Trocado `signInWithPopup` por `signInWithRedirect`
 - ✅ Adicionado `getRedirectResult` para processar retorno
 - ✅ Verificação automática ao carregar a página
 
 #### `src/pages/Login.tsx`
+
 - ✅ Atualizado para usar redirecionamento
 - ✅ Adicionado hook `useAuthRedirect`
 
 #### `src/hooks/useAuthRedirect.ts` (NOVO)
+
 - ✅ Hook customizado para processar redirecionamento
 - ✅ Valida email autorizado após login
 - ✅ Faz logout automático se não autorizado
 
 #### `firebase.json`
+
 - ✅ Adicionados headers COOP e COEP
 - ✅ Configuração `same-origin-allow-popups`
 
@@ -49,10 +56,12 @@ getRedirectResult(auth) // Processa o resultado após retornar
 ### Fluxo de Login:
 
 1. **Usuário clica em "Continuar com Google"**
+
    - Página atual é salva
    - Redireciona para login do Google
 
 2. **Usuário faz login no Google**
+
    - Google autentica
    - Redireciona de volta para a aplicação
 
@@ -84,12 +93,14 @@ Os headers COOP serão aplicados automaticamente pelo Firebase Hosting.
 ## 📝 Diferenças: Popup vs Redirecionamento
 
 ### Popup (antigo):
+
 - ✅ Usuário fica na mesma página
 - ❌ Bloqueado por COOP
 - ❌ Pode ser bloqueado por bloqueadores de popup
 - ❌ Não funciona bem em mobile
 
 ### Redirecionamento (novo):
+
 - ✅ Funciona sempre
 - ✅ Sem erros COOP
 - ✅ Melhor experiência em mobile
@@ -126,6 +137,7 @@ Os headers COOP serão aplicados automaticamente pelo Firebase Hosting.
 ### "Não volta para a aplicação após login"
 
 **Solução:** Verifique os domínios autorizados no Firebase:
+
 1. Firebase Console > Authentication > Settings
 2. Authorized domains
 3. Adicione seu domínio de produção
@@ -138,6 +150,7 @@ Verifique se o import está correto.
 ### "Ainda vejo erro COOP"
 
 **Solução:** Limpe o cache do navegador:
+
 - Chrome: Ctrl + Shift + Delete
 - Ou abra em aba anônima
 
@@ -154,6 +167,7 @@ Verifique se o import está correto.
 Agora o login funciona perfeitamente, sem erros COOP! 🚀
 
 O sistema:
+
 - Redireciona para Google
 - Valida o email após retorno
 - Bloqueia emails não autorizados

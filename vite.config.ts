@@ -10,10 +10,12 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     headers: {
       "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
-      "Cross-Origin-Embedder-Policy": "unsafe-none"
-    }
+      "Cross-Origin-Embedder-Policy": "unsafe-none",
+    },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  plugins: [react(), mode === "development" && componentTagger()].filter(
+    Boolean
+  ),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

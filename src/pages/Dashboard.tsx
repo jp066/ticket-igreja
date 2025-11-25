@@ -88,85 +88,85 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-background p-2 sm:p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Dashboard de Filipetas</h1>
-            <p className="text-muted-foreground mt-1">Gerencie todas as filipetas vendidas</p>
+            <h1 className="text-2xl sm:text-3xl font-bold">Dashboard de Filipetas</h1>
+            <p className="text-sm sm:text-base text-muted-foreground mt-1">Gerencie todas as filipetas vendidas</p>
             {user && (
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                 Logado como: {user.email}
               </p>
             )}
           </div>
-          <div className="flex gap-2">
-            <Button onClick={handleLogout} variant="outline">
-              <LogOut className="w-4 h-4 mr-2" />
-              Sair
+          <div className="flex gap-2 flex-wrap">
+            <Button onClick={handleLogout} variant="outline" size="sm" className="flex-1 sm:flex-none">
+              <LogOut className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Sair</span>
             </Button>
-            <Button onClick={() => navigate("/")} variant="outline">
-              <Home className="w-4 h-4 mr-2" />
-              Voltar ao Início
+            <Button onClick={() => navigate("/")} variant="outline" size="sm" className="flex-1 sm:flex-none">
+              <Home className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Início</span>
             </Button>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
           <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardHeader className="pb-2 sm:pb-3">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
                 Total de Vendas
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <Ticket className="w-5 h-5 text-primary" />
-                <span className="text-2xl font-bold">{totalTickets}</span>
+                <Ticket className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                <span className="text-xl sm:text-2xl font-bold">{totalTickets}</span>
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardHeader className="pb-2 sm:pb-3">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
                 Total de Ingressos
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-primary" />
-                <span className="text-2xl font-bold">{totalQuantity}</span>
+                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                <span className="text-xl sm:text-2xl font-bold">{totalQuantity}</span>
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardHeader className="pb-2 sm:pb-3">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
                 Filipetas Usadas
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-primary" />
-                <span className="text-2xl font-bold">{usedTickets}</span>
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                <span className="text-xl sm:text-2xl font-bold">{usedTickets}</span>
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardHeader className="pb-2 sm:pb-3">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
                 Disponíveis
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <Ticket className="w-5 h-5 text-success" />
-                <span className="text-2xl font-bold">{totalTickets - usedTickets}</span>
+                <Ticket className="w-4 h-4 sm:w-5 sm:h-5 text-success" />
+                <span className="text-xl sm:text-2xl font-bold">{totalTickets - usedTickets}</span>
               </div>
             </CardContent>
           </Card>
@@ -193,7 +193,7 @@ const Dashboard = () => {
         {/* Tickets List */}
         <Card>
           <CardHeader>
-            <CardTitle>Filipetas Vendidas ({filteredTickets.length})</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Filipetas Vendidas ({filteredTickets.length})</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -205,44 +205,45 @@ const Dashboard = () => {
                 {searchTerm ? "Nenhuma filipeta encontrada" : "Nenhuma filipeta vendida ainda"}
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {filteredTickets.map((ticket) => (
                   <div
                     key={ticket.id}
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-lg hover:bg-muted/50 transition-colors gap-3"
                   >
                     <div 
                       className="flex-1 cursor-pointer"
                       onClick={() => navigate(`/ticket/${ticket.id}`)}
                     >
-                      <div className="flex items-center gap-3">
-                        <div>
-                          <p className="font-semibold">{ticket.name}</p>
-                          <p className="text-sm text-muted-foreground">{ticket.phone}</p>
-                        </div>
+                      <div className="flex flex-col gap-1">
+                        <p className="font-semibold text-sm sm:text-base">{ticket.name}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground">{ticket.phone}</p>
+                        <p className="text-xs text-muted-foreground font-mono sm:hidden">
+                          Código: {ticket.ticketCode}
+                        </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-6">
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Código</p>
-                        <p className="font-mono text-sm font-medium">{ticket.ticketCode}</p>
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-6">
+                      <div className="text-left sm:text-right hidden sm:block">
+                        <p className="text-xs sm:text-sm text-muted-foreground">Código</p>
+                        <p className="font-mono text-xs sm:text-sm font-medium">{ticket.ticketCode}</p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Quantidade</p>
-                        <p className="font-semibold">{ticket.quantity}</p>
+                      <div className="text-left sm:text-right">
+                        <p className="text-xs sm:text-sm text-muted-foreground">Quantidade</p>
+                        <p className="text-sm sm:text-base font-semibold">{ticket.quantity}</p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Data</p>
-                        <p className="text-sm">{formatDate(ticket.createdAt)}</p>
+                      <div className="text-left sm:text-right">
+                        <p className="text-xs sm:text-sm text-muted-foreground">Data</p>
+                        <p className="text-xs sm:text-sm">{formatDate(ticket.createdAt)}</p>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                         {ticket.used ? (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                          <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground w-full sm:w-auto justify-center">
                             Usado
                           </span>
                         ) : (
                           <>
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success">
+                            <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success sm:inline-flex hidden">
                               Disponível
                             </span>
                             <Button
@@ -252,9 +253,9 @@ const Dashboard = () => {
                                 e.stopPropagation();
                                 handleMarkAsUsed(ticket.id!, ticket.name);
                               }}
-                              className="ml-2"
+                              className="flex-1 sm:flex-none text-xs sm:text-sm"
                             >
-                              <CheckCircle className="w-4 h-4 mr-1" />
+                              <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                               Marcar Usado
                             </Button>
                           </>

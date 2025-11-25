@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Home, Loader2, LayoutDashboard } from "lucide-react";
-import QRCodeStyling from "qr-code-styling";
 import { getTicketById, Ticket } from "@/lib/ticketService";
 import { toast } from "sonner";
 
@@ -24,7 +23,7 @@ const TicketDetails = () => {
         const ticketData = await getTicketById(id);
         setTicket(ticketData);
       } catch (error) {
-        console.error('Erro ao buscar filipeta:', error);
+        console.error("Erro ao buscar filipeta:", error);
         toast.error("Erro ao carregar filipeta");
       } finally {
         setIsLoading(false);
@@ -34,32 +33,7 @@ const TicketDetails = () => {
     fetchTicket();
   }, [id]);
 
-  useEffect(() => {
-    if (ticket && ticket.id) {
-      const qrCode = new QRCodeStyling({
-        width: 240,
-        height: 240,
-        data: ticket.ticketCode || ticket.id,
-        dotsOptions: {
-          color: "#10b981",
-          type: "rounded"
-        },
-        backgroundOptions: {
-          color: "#ffffff",
-        },
-        imageOptions: {
-          crossOrigin: "anonymous",
-          margin: 10
-        }
-      });
-
-      const qrContainer = document.getElementById("qr-code");
-      if (qrContainer) {
-        qrContainer.innerHTML = "";
-        qrCode.append(qrContainer);
-      }
-    }
-  }, [ticket]);
+  // QR Code fixo - não precisa mais gerar dinamicamente
 
   if (isLoading) {
     return (
@@ -101,10 +75,10 @@ const TicketDetails = () => {
 
         <Card className="w-full max-w-md">
           <CardContent className="pt-6 text-center">
-            <p className="text-muted-foreground mb-4">Filipeta não encontrada</p>
-            <Button onClick={() => navigate("/")}>
-              Voltar ao Início
-            </Button>
+            <p className="text-muted-foreground mb-4">
+              Filipeta não encontrada
+            </p>
+            <Button onClick={() => navigate("/")}>Voltar ao Início</Button>
           </CardContent>
         </Card>
       </div>
@@ -139,33 +113,39 @@ const TicketDetails = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Quantidade</p>
-              <p className="font-medium">{ticket.quantity} {ticket.quantity === 1 ? 'ingresso' : 'ingressos'}</p>
+              <p className="font-medium">
+                {ticket.quantity}{" "}
+                {ticket.quantity === 1 ? "ingresso" : "ingressos"}
+              </p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Código</p>
-              <p className="font-mono text-sm font-medium">{ticket.ticketCode || ticket.id}</p>
+              <p className="font-mono text-sm font-medium">
+                {ticket.ticketCode || ticket.id}
+              </p>
             </div>
           </div>
 
           <div className="bg-card border-2 border-primary/20 rounded-lg p-6 flex flex-col items-center">
             <p className="text-sm font-medium text-muted-foreground mb-3">
-              Apresente este QR Code na entrada
+              Para finalizar sua inscrição, envie o comprovante via WhatsApp
             </p>
-            <div id="qr-code" className="rounded-lg overflow-hidden shadow-lg"></div>
+            <img
+              src="https://ticket-igreja.web.app/qrcode.jpg"
+              alt="QR Code WhatsApp"
+              className="w-60 h-60 rounded-lg shadow-lg"
+            />
           </div>
 
           <div className="space-y-2">
-            <Button 
-              className="w-full" 
+            <Button
+              className="w-full"
               variant="outline"
               onClick={() => window.print()}
             >
               Salvar Comprovante
             </Button>
-            <Button 
-              className="w-full" 
-              onClick={() => navigate("/")}
-            >
+            <Button className="w-full" onClick={() => navigate("/")}>
               <Home className="w-4 h-4 mr-2" />
               Voltar ao Início
             </Button>
