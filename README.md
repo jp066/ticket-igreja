@@ -2,7 +2,17 @@
 
 Sistema completo de venda e gerenciamento de filipetas (ingressos) para eventos da igreja, com integração Firebase Firestore.
 
-## 🔥 IMPORTANTE: Configuração do Firebase
+## � Deploy Rápido
+
+```bash
+# Build e deploy para produção
+npm run build
+firebase deploy --only hosting
+```
+
+📖 **Guia completo:** [DEPLOY.md](./DEPLOY.md)
+
+## �🔥 IMPORTANTE: Configuração do Firebase
 
 Antes de usar o sistema, você precisa configurar o Firebase. **Leia o arquivo [FIREBASE_SETUP.md](./FIREBASE_SETUP.md)** para instruções detalhadas.
 
@@ -23,6 +33,14 @@ npm install firebase
 3. **Ou edite diretamente:**
    - Abra `src/lib/firebase.ts`
    - Substitua as credenciais do Firebase
+
+## 🔐 Autenticação
+
+O sistema possui autenticação com Google. **Leia:** [AUTH_SETUP.md](./AUTH_SETUP.md)
+
+- ✅ Apenas o email autorizado pode acessar o dashboard
+- ✅ Login com Google
+- ✅ Proteção de rotas
 
 ---
 

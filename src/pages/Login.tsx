@@ -29,17 +29,27 @@ const Login = () => {
       const result = await signInWithGoogle();
       
       // Verifica se o email é autorizado
-      if (result?.user?.email === AUTHORIZED_EMAIL) {
+      if (result.user.email === AUTHORIZED_EMAIL) {
         toast.success("Login realizado com sucesso!");
         navigate("/dashboard");
       } else {
-        // Email não autorizado, faz logout imediatamente
+        // Email não autorizado
         await signOut();
         toast.error("Acesso negado. Apenas o administrador autorizado pode acessar este painel.");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao fazer login:', error);
-      toast.error("Erro ao fazer login. Tente novamente.");
+      
+      // Mensagens de erro mais específicas
+      if (error.code === 'auth/popup-blocked') {
+        toast.error("Popup bloqueado! Por favor, desabilite bloqueadores de popup ou extensões de privacidade e tente novamente.");
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        toast.error("Login cancelado.");
+      } else if (error.code === 'auth/cancelled-popup-request') {
+        toast.error("Requisição cancelada. Tente novamente.");
+      } else {
+        toast.error("Erro ao fazer login. Verifique se bloqueadores de anúncios estão desabilitados e tente novamente.");
+      }
     }
   };
 
@@ -106,6 +116,16 @@ const Login = () => {
               </svg>
               Continuar com Google
             </Button>
+            
+            <div className="text-xs text-muted-foreground text-center space-y-1 pt-2">
+              <p className="font-medium">⚠️ Se o login não funcionar:</p>
+              <ul className="text-left space-y-1 pl-4">
+                <li>• Desabilite extensões de bloqueio (AdBlock, uBlock, Privacy Badger)</li>
+                <li>• Desabilite bloqueador de popups no navegador</li>
+                <li>• Tente em modo anônimo/privado</li>
+                <li>• Use outro navegador (Chrome recomendado)</li>
+              </ul>
+            </div>
           </div>
 
           <div className="text-center text-sm text-muted-foreground">
